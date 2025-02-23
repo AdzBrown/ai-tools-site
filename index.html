@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,157 +11,143 @@
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-        }
+        }/* Background Styling */
+    body {
+        background: linear-gradient(to right, #f8f9fa, #e3f2fd);
+        color: #333;
+        text-align: center;
+        padding: 20px;
+    }
 
-        /* Background Styling */
-        body {
-            background: linear-gradient(to right, #f8f9fa, #e3f2fd);
-            color: #333;
-            text-align: center;
+    /* Container Styling */
+    .container {
+        background: #ffffff;
+        max-width: 900px;
+        margin: auto;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+    }
+
+    /* Header Styling */
+    h1, h2 {
+        color: #0077b5;
+        margin-bottom: 15px;
+        font-weight: bold;
+    }
+
+    /* AI Tool Cards */
+    .tool {
+        background: #f1f1f1;
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 8px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    /* Buttons */
+    .button {
+        background-color: #0077b5;
+        color: white;
+        padding: 12px 18px;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 15px;
+        border-radius: 5px;
+        transition: 0.3s;
+        font-weight: bold;
+    }
+
+    .button:hover {
+        background-color: #0056b3;
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 600px) {
+        .container {
+            width: 90%;
             padding: 20px;
         }
+    }
+</style>
 
-        /* Container Styling */
-        .container {
-            background: #ffffff;
-            max-width: 900px;
-            margin: auto;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-
-        /* Header Styling */
-        h1 {
-            color: #0077b5;
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
-
-        h2 {
-            color: #333;
-            margin-top: 15px;
-            font-size: 22px;
-        }
-
-        /* AI Tool Cards */
-        .tool {
-            background: #f1f1f1;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 8px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-
-        .tool p {
-            font-size: 14px;
-            color: #555;
-        }
-
-        /* Buttons */
-        .button {
-            background-color: #0077b5;
-            color: white;
-            padding: 12px 18px;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 15px;
-            border-radius: 5px;
-            transition: 0.3s;
-            font-weight: bold;
-        }
-
-        .button:hover {
-            background-color: #0056b3;
-        }
-
-        /* Links */
-        a {
-            color: #0077b5;
-            font-weight: bold;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        /* Mobile Responsiveness */
-        @media (max-width: 600px) {
-            .container {
-                width: 90%;
-                padding: 20px;
-            }
-        }
-    </style>
 </head>
-<body>
-
-    <!-- Temporary Email Generator Section -->
-    <div class="container">
-        <h1>Free Temporary Email Generator</h1>
-        <p>Click below to generate a free temporary email and receive messages.</p>
-        <button class="button" onclick="generateTempEmail()">Get Temporary Email</button>
-        <p id="emailBox">Your email will appear here...</p>
-        <button class="button" onclick="fetchEmails()">Refresh Inbox</button>
-        <div class="email-list" id="emailList">
-            <h3>📩 Inbox</h3>
-            <p>No emails yet.</p>
-        </div>
+<body><!-- Temporary Email Generator Section -->
+<div class="container">
+    <h1>Free Temporary Email Generator</h1>
+    <p>Click below to generate a free temporary email and receive messages.</p>
+    <button class="button" onclick="generateTempEmail()">Get Temporary Email</button>
+    <p id="emailBox">Your email will appear here...</p>
+    <button class="button" onclick="fetchEmails()">Refresh Inbox</button>
+    <div class="email-list" id="emailList">
+        <h3>📩 Inbox</h3>
+        <p>No emails yet.</p>
     </div>
+</div>
 
-    <!-- AI Tools Hub Section -->
-    <div class="container">
-        <h1>AI Tools Hub</h1>
-        <p>Unlock the power of AI! Explore free tools for text, images, coding, and more.</p>
-        <div class="tool">
-            <h3>✍️ ChatGPT - AI Writing</h3>
-            <p>Need content fast? ChatGPT helps you write articles, emails, and scripts with ease.</p>
-            <p><a href="https://chat.openai.com/" target="_blank">Try ChatGPT Now</a></p>
-        </div>
+<!-- AI Tools Hub Section -->
+<div class="container">
+    <h1>AI Tools Hub</h1>
+    <p>Unlock the power of AI! Explore free tools for text, images, coding, and more.</p>
+    <div class="tool">
+        <h3>✍️ ChatGPT - AI Writing</h3>
+        <p><a href="https://chat.openai.com/" target="_blank">Try ChatGPT Now</a></p>
     </div>
-
-    <!-- AI Chatbot Section -->
-    <div class="container">
-        <h2>Ask Me Anything About Cloud ☁️</h2>
-        <div id="chatbox">
-            <p><strong>Chatbot:</strong> Hi! Ask me about AWS, Google Cloud, Oracle, Alibaba, or Huawei.</p>
-        </div>
-        <input type="text" id="userInput" placeholder="Type your question...">
-        <button onclick="askChatbot()">Ask</button>
+    <div class="tool">
+        <h3>🎨 DALL·E - AI Image Generator</h3>
+        <p><a href="https://openai.com/dall-e/" target="_blank">Try DALL·E Now</a></p>
     </div>
+</div>
 
-    <script>
-        async function askChatbot() {
-            let input = document.getElementById("userInput").value;
-            let chatbox = document.getElementById("chatbox");
+<!-- AI Chatbot Section -->
+<div class="container">
+    <h2>Ask Me Anything About Cloud ☁️</h2>
+    <div id="chatbox">
+        <p><strong>Chatbot:</strong> Hi! Ask me about AWS, Google Cloud, Oracle, Alibaba, or Huawei.</p>
+    </div>
+    <input type="text" id="userInput" placeholder="Type your question...">
+    <button onclick="askChatbot()">Ask</button>
+</div>
 
-            if (!input.trim()) {
-                return;
-            }
+<script>
+    async function generateTempEmail() {
+        // Logic for generating a temp email
+    }
 
-            chatbox.innerHTML += `<p><strong>You:</strong> ${input}</p>`;
-            chatbox.innerHTML += `<p><strong>Chatbot:</strong> Thinking...</p>`;
+    async function fetchEmails() {
+        // Logic for fetching emails
+    }
 
-            let response = await fetch("https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer hf_your_free_huggingface_api_key"
-                },
-                body: JSON.stringify({ inputs: input })
-            });
+    async function askChatbot() {
+        let input = document.getElementById("userInput").value;
+        let chatbox = document.getElementById("chatbox");
 
-            let responseData = await response.json();
-            let botReply = responseData.hasOwnProperty('error') ? "I'm currently unavailable. Try again later." : responseData[0].generated_text;
-
-            chatbox.innerHTML += `<p><strong>Chatbot:</strong> ${botReply}</p>`;
-            document.getElementById("userInput").value = "";
+        if (!input.trim()) {
+            return;
         }
-    </script>
+
+        chatbox.innerHTML += `<p><strong>You:</strong> ${input}</p>`;
+        chatbox.innerHTML += `<p><strong>Chatbot:</strong> Thinking...</p>`;
+
+        let response = await fetch("https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer hf_your_free_huggingface_api_key"
+            },
+            body: JSON.stringify({ inputs: input })
+        });
+
+        let responseData = await response.json();
+        let botReply = responseData.hasOwnProperty('error') ? "I'm currently unavailable. Try again later." : responseData[0].generated_text;
+
+        chatbox.innerHTML += `<p><strong>Chatbot:</strong> ${botReply}</p>`;
+        document.getElementById("userInput").value = "";
+    }
+</script>
 
 </body>
 </html>
