@@ -159,43 +159,86 @@
         </div>
     </div>
 
-    <script>
-        let email = "";
-        let password = "TempPass123!";
-        let token = "";
+    
+        <script>
+    let email = "";
+    let password = "TempPass123!";
+    let token = "";
+    let accountId = "";
 
-        async function generateTempEmail() {
-            try {
-                let domainResponse = await fetch("https://api.mail.tm/domains");
-                let domainData = await domainResponse.json();
-                let domain = domainData["hydra:member"][0].domain;
+    // Function to generate and register a temporary email
+    async function generateTempEmail() {
+        try {
+            // Get available domains
+            let domainResponse = await fetch("https://api.mail.tm/domains");
+            let domainData = await domainResponse.json();
+            let domain = domainData["hydra:member"][0].domain;
 
-                let randomUser = "user" + Math.floor(Math.random() * 100000);
-                email = randomUser + "@" + domain;
+            // Generate a random username
+            let randomUser = "user" + Math.floor(Math.random() * 100000);
+            email = randomUser + "@" + domain;
 
-                document.getElementById("emailBox").innerText = email;
+            document.getElementById("emailBox").innerText = email;
 
-                let registerResponse = await fetch("https://api.mail.tm/accounts", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ address: email, password: password })
-                });
+            // Register the email with Mail.tm
+            let registerResponse = await fetch("https://api.mail.tm/accounts", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ address: email, password: password })
+            });
 
-                let tokenResponse = await fetch("https://api.mail.tm/token", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ address: email, password: password })
-                });
+            let registerData = await registerResponse.json();
 
-                let tokenData = await tokenResponse.json();
-                token = tokenData.token;
-
-            } catch (err) {
-                console.error(err);
-                document.getElementById("emailBox").innerText = "Error generating email.";
+            if (!registerResponse.ok) {
+                throw new Error("Error registering email.");
             }
-        }
-    </script>
 
-</body>
-</html>
+            accountId = registerData.id;
+
+            // Get authentication token
+            let tokenResponse = await fetch("https://api.mail.tm/token", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ address: email, password: password })
+            });
+
+            let tokenData = await tokenResponse.json();
+            token = tokenData.token;
+
+            alert("Email successfully registered! You can now receive emails.");
+        } catch (err) {
+            console.error(err);
+            document.getElementById("emailBox").innerText = "Error generating email.";
+        }
+    }
+
+    // Function to fetch received emails
+    async function fetchEmails() {
+        if (!token) {
+            alert("Generate an email first!");
+            return;
+        }
+
+        try {
+            let messagesResponse = await fetch("https://api.mail.tm/messages", {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            let messagesData = await messagesResponse.json();
+            let emailList = document.getElementById("emailList");
+
+            emailList.innerHTML = "<h3>📩 Inbox</h3>";
+
+            if (messagesData["hydra:member"].length === 0) {
+                emailList.innerHTML += "<p>No emails yet. Try again later.</p>";
+            } else {
+                messagesData["hydra:member"].forEach(email => {
+                    emailList.innerHTML += `<p><strong>From:</strong> ${email.from.address}<br><strong>Subject:</strong> ${email.subject}</p>`;
+                });
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Error fetching emails.");
+        }
+    }
+</script>
