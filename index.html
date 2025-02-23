@@ -58,3 +58,29 @@
     </footer>
 </body>
 </html>
+<div class="container">
+    <h2>Free Fake Email Generator</h2>
+    <p>Click the button to generate a fake email.</p>
+    <input type="text" id="fakeEmail" readonly>
+    <button onclick="generateFakeEmail()">Generate Email</button>
+    <button onclick="copyEmail()">Copy</button>
+</div>
+
+<script>
+    function generateFakeEmail() {
+        const prefixes = ["user", "random", "guest", "anon", "fake"];
+        const domains = ["mail.com", "email.net", "inbox.org", "tempmail.co"];
+        const randomPrefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+        const randomNumber = Math.floor(Math.random() * 10000);
+        const randomDomain = domains[Math.floor(Math.random() * domains.length)];
+        const email = randomPrefix + randomNumber + "@" + randomDomain;
+        document.getElementById("fakeEmail").value = email;
+    }
+
+    function copyEmail() {
+        const emailField = document.getElementById("fakeEmail");
+        emailField.select();
+        document.execCommand("copy");
+        alert("Email copied: " + emailField.value);
+    }
+</script>
