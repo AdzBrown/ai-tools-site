@@ -105,12 +105,9 @@
     <div class="container">
         <h1>Free Temporary Email Generator</h1>
         <p>Click below to generate a free temporary email and receive messages.</p>
-        
         <button class="button" onclick="generateTempEmail()">Get Temporary Email</button>
         <p id="emailBox">Your email will appear here...</p>
-
         <button class="button" onclick="fetchEmails()">Refresh Inbox</button>
-
         <div class="email-list" id="emailList">
             <h3>📩 Inbox</h3>
             <p>No emails yet.</p>
@@ -121,136 +118,51 @@
     <div class="container">
         <h1>AI Tools Hub</h1>
         <p>Unlock the power of AI! Explore free tools for text, images, coding, and more.</p>
-
         <div class="tool">
             <h3>✍️ ChatGPT - AI Writing</h3>
             <p>Need content fast? ChatGPT helps you write articles, emails, and scripts with ease.</p>
             <p><a href="https://chat.openai.com/" target="_blank">Try ChatGPT Now</a></p>
         </div>
+    </div>
 
-        <div class="tool">
-            <h3>🎨 DALL·E - AI Image Generator</h3>
-            <p>Transform words into AI-generated artwork! Create professional images with text prompts.</p>
-            <p><a href="https://openai.com/dall-e/" target="_blank">Try DALL·E Now</a></p>
+    <!-- AI Chatbot Section -->
+    <div class="container">
+        <h2>Ask Me Anything About Cloud ☁️</h2>
+        <div id="chatbox">
+            <p><strong>Chatbot:</strong> Hi! Ask me about AWS, Google Cloud, Oracle, Alibaba, or Huawei.</p>
         </div>
-
-        <div class="tool">
-            <h3>🎬 Runway ML - AI Video Editing</h3>
-            <p>Revolutionize video editing with AI! Remove backgrounds, edit clips, and enhance videos effortlessly.</p>
-            <p><a href="https://runwayml.com/" target="_blank">Try Runway ML Now</a></p>
-        </div>
-
-        <div class="tool">
-            <h3>🖼️ Canva AI - AI Design</h3>
-            <p>Create professional-looking social media posts, presentations, and marketing materials.</p>
-            <p><a href="https://www.canva.com/" target="_blank">Try Canva AI Now</a></p>
-        </div>
-
-        <div class="tool">
-            <h3>🖊️ Grammarly - AI Writing Assistant</h3>
-            <p>Write with confidence! Grammarly checks your grammar, spelling, and tone.</p>
-            <p><a href="https://www.grammarly.com/" target="_blank">Try Grammarly Now</a></p>
-        </div>
-
-        <div class="tool">
-            <h3>👨‍💻 GitHub Copilot - AI Code Generator</h3>
-            <p>Supercharge your coding! GitHub Copilot suggests real-time code completions.</p>
-            <p><a href="https://github.com/features/copilot" target="_blank">Try GitHub Copilot Now</a></p>
-        </div>
+        <input type="text" id="userInput" placeholder="Type your question...">
+        <button onclick="askChatbot()">Ask</button>
     </div>
 
     <script>
-    let email = "";
-    let password = "TempPass123!";
-    let token = "";
-    let accountId = "";
+        async function askChatbot() {
+            let input = document.getElementById("userInput").value;
+            let chatbox = document.getElementById("chatbox");
 
-    // Function to generate and register a temporary email
-    async function generateTempEmail() {
-        try {
-            // Get available domains
-            let domainResponse = await fetch("https://api.mail.tm/domains");
-            let domainData = await domainResponse.json();
-            let domain = domainData["hydra:member"][0].domain;
-
-            // Generate a random username
-            let randomUser = "user" + Math.floor(Math.random() * 100000);
-            email = randomUser + "@" + domain;
-
-            document.getElementById("emailBox").innerText = email;
-
-            // Register the email with Mail.tm
-            let registerResponse = await fetch("https://api.mail.tm/accounts", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ address: email, password: password })
-            });
-
-            let registerData = await registerResponse.json();
-
-            if (!registerResponse.ok) {
-                throw new Error("Error registering email.");
+            if (!input.trim()) {
+                return;
             }
 
-            accountId = registerData.id;
+            chatbox.innerHTML += `<p><strong>You:</strong> ${input}</p>`;
+            chatbox.innerHTML += `<p><strong>Chatbot:</strong> Thinking...</p>`;
 
-            // Get authentication token
-            let tokenResponse = await fetch("https://api.mail.tm/token", {
+            let response = await fetch("https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ address: email, password: password })
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer hf_your_free_huggingface_api_key"
+                },
+                body: JSON.stringify({ inputs: input })
             });
 
-            let tokenData = await tokenResponse.json();
-            token = tokenData.token;
+            let responseData = await response.json();
+            let botReply = responseData.hasOwnProperty('error') ? "I'm currently unavailable. Try again later." : responseData[0].generated_text;
 
-            alert("Email successfully registered! You can now receive emails.");
-        } catch (err) {
-            console.error(err);
-            document.getElementById("emailBox").innerText = "Error generating email.";
+            chatbox.innerHTML += `<p><strong>Chatbot:</strong> ${botReply}</p>`;
+            document.getElementById("userInput").value = "";
         }
-    }
+    </script>
 
-    // Function to fetch received emails and display full content
-    async function fetchEmails() {
-        if (!token) {
-            alert("Generate an email first!");
-            return;
-        }
-
-        try {
-            let messagesResponse = await fetch("https://api.mail.tm/messages", {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-
-            let messagesData = await messagesResponse.json();
-            let emailList = document.getElementById("emailList");
-
-            emailList.innerHTML = "<h3>📩 Inbox</h3>";
-
-            if (messagesData["hydra:member"].length === 0) {
-                emailList.innerHTML += "<p>No emails yet. Try again later.</p>";
-            } else {
-                messagesData["hydra:member"].forEach(async (email) => {
-                    let emailDetailsResponse = await fetch(`https://api.mail.tm/messages/${email.id}`, {
-                        headers: { Authorization: `Bearer ${token}` }
-                    });
-
-                    let emailDetails = await emailDetailsResponse.json();
-
-                    emailList.innerHTML += `
-                        <div style="border: 1px solid #ddd; padding: 10px; margin: 5px; border-radius: 5px;">
-                            <p><strong>From:</strong> ${email.from.address}</p>
-                            <p><strong>Subject:</strong> ${email.subject}</p>
-                            <p><strong>Message:</strong> ${emailDetails.text}</p>
-                        </div>
-                    `;
-                });
-            }
-        } catch (err) {
-            console.error(err);
-            alert("Error fetching emails.");
-        }
-    }
-</script>
-    
+</body>
+</html>
