@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Access the best free AI tools for writing, design, coding, and more. Generate free temporary emails instantly.">
-    <title>AI Tools Hub - Professional AI Resource Center</title>
+    <title>AI Tools Hub - Free AI Tools & Temporary Email Generator</title>
     <style>
         /* Global Styles */
         * {
@@ -56,6 +56,11 @@
             border: 1px solid #ddd;
         }
 
+        .tool p {
+            font-size: 14px;
+            color: #555;
+        }
+
         /* Buttons */
         .button {
             background-color: #0077b5;
@@ -72,22 +77,6 @@
 
         .button:hover {
             background-color: #0056b3;
-        }
-
-        /* Email List Styling */
-        .email-list {
-            text-align: left;
-            margin-top: 20px;
-            background: #ffffff;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-            border: 1px solid #ddd;
-        }
-
-        .email-item {
-            border-bottom: 1px solid #ddd;
-            padding: 10px;
         }
 
         /* Links */
@@ -112,43 +101,7 @@
 </head>
 <body>
 
-    <!-- AI Tools Hub Section -->
-    <div class="container">
-        <h1>AI Tools Hub</h1>
-        <p>Access the best free AI-powered tools for text, images, coding, and more.</p>
-
-        <div class="tool">
-            <h3>✍️ ChatGPT - AI Writing</h3>
-            <p>Generate text, answer questions, and get AI-powered writing assistance. <a href="https://chat.openai.com/" target="_blank">Try Now</a></p>
-        </div>
-
-        <div class="tool">
-            <h3>🎨 DALL·E - AI Image Generator</h3>
-            <p>Generate stunning AI-powered images from text descriptions. <a href="https://openai.com/dall-e/" target="_blank">Try Now</a></p>
-        </div>
-
-        <div class="tool">
-            <h3>🎬 Runway ML - AI Video Editing</h3>
-            <p>Create and edit videos with AI-powered tools. <a href="https://runwayml.com/" target="_blank">Try Now</a></p>
-        </div>
-
-        <div class="tool">
-            <h3>🖼️ Canva AI - AI Design</h3>
-            <p>Use AI to create professional designs and social media graphics. <a href="https://www.canva.com/" target="_blank">Try Now</a></p>
-        </div>
-
-        <div class="tool">
-            <h3>🖊️ Grammarly - AI Writing Assistant</h3>
-            <p>Improve your writing with AI-powered grammar and spell-checking. <a href="https://www.grammarly.com/" target="_blank">Try Now</a></p>
-        </div>
-
-        <div class="tool">
-            <h3>👨‍💻 GitHub Copilot - AI Code Generator</h3>
-            <p>Get AI-powered code suggestions and autocomplete in your IDE. <a href="https://github.com/features/copilot" target="_blank">Try Now</a></p>
-        </div>
-    </div>
-
-    <!-- Temporary Email Generator Section -->
+    <!-- Temporary Email Generator Section (Now First) -->
     <div class="container">
         <h1>Free Temporary Email Generator</h1>
         <p>Click below to generate a free temporary email and receive messages.</p>
@@ -164,9 +117,50 @@
         </div>
     </div>
 
+    <!-- AI Tools Hub Section -->
+    <div class="container">
+        <h1>AI Tools Hub</h1>
+        <p>Unlock the power of AI! Explore free tools for text, images, coding, and more.</p>
+
+        <div class="tool">
+            <h3>✍️ ChatGPT - AI Writing</h3>
+            <p>Need content fast? ChatGPT helps you write articles, emails, and scripts with ease. Boost productivity with instant AI-generated text.</p>
+            <p><a href="https://chat.openai.com/" target="_blank">Try ChatGPT Now</a></p>
+        </div>
+
+        <div class="tool">
+            <h3>🎨 DALL·E - AI Image Generator</h3>
+            <p>Transform words into stunning AI-generated artwork! Create professional images with simple text prompts.</p>
+            <p><a href="https://openai.com/dall-e/" target="_blank">Try DALL·E Now</a></p>
+        </div>
+
+        <div class="tool">
+            <h3>🎬 Runway ML - AI Video Editing</h3>
+            <p>Revolutionize video editing with AI! Remove backgrounds, edit clips, and enhance videos effortlessly.</p>
+            <p><a href="https://runwayml.com/" target="_blank">Try Runway ML Now</a></p>
+        </div>
+
+        <div class="tool">
+            <h3>🖼️ Canva AI - AI Design</h3>
+            <p>Create professional-looking social media posts, presentations, and marketing materials with AI-powered design suggestions.</p>
+            <p><a href="https://www.canva.com/" target="_blank">Try Canva AI Now</a></p>
+        </div>
+
+        <div class="tool">
+            <h3>🖊️ Grammarly - AI Writing Assistant</h3>
+            <p>Write with confidence! Grammarly checks your grammar, spelling, and tone to improve your writing instantly.</p>
+            <p><a href="https://www.grammarly.com/" target="_blank">Try Grammarly Now</a></p>
+        </div>
+
+        <div class="tool">
+            <h3>👨‍💻 GitHub Copilot - AI Code Generator</h3>
+            <p>Supercharge your coding! GitHub Copilot suggests real-time code completions and helps you write better, faster.</p>
+            <p><a href="https://github.com/features/copilot" target="_blank">Try GitHub Copilot Now</a></p>
+        </div>
+    </div>
+
     <script>
         let email = "";
-        let emailId = "";
         let token = "";
 
         async function generateTempEmail() {
@@ -179,12 +173,6 @@
                 email = randomUser + "@" + domain;
 
                 document.getElementById("emailBox").innerText = email;
-
-                let accountResponse = await fetch("https://api.mail.tm/accounts", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ address: email, password: "tempPass123" })
-                });
 
                 let tokenResponse = await fetch("https://api.mail.tm/token", {
                     method: "POST",
