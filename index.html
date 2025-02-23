@@ -99,50 +99,6 @@
         }
     </style>
 </head>
-<!-- Cloud AI Chatbot Section -->
-<div id="chatbot-container">
-    <h2>Ask Me Anything About Cloud ☁️</h2>
-    <div id="chatbox">
-        <p><strong>Chatbot:</strong> Hi! Ask me about AWS, Google Cloud, Oracle, Alibaba, or Huawei.</p>
-    </div>
-    <input type="text" id="userInput" placeholder="Type your question...">
-    <button onclick="askChatbot()">Ask</button>
-</div>
-
-<style>
-    #chatbot-container { 
-        width: 100%; max-width: 600px; 
-        margin: auto; text-align: center; 
-        padding: 20px; border-radius: 10px; 
-        background: #f9f9f9; box-shadow: 0 0 10px rgba(0,0,0,0.1); 
-    }
-    #chatbox { 
-        text-align: left; max-height: 300px; 
-        overflow-y: auto; padding: 10px; 
-        border: 1px solid #ddd; border-radius: 5px; 
-        background: #fff; padding: 10px;
-    }
-    input, button { 
-        margin-top: 10px; padding: 10px; 
-        font-size: 16px; width: 80%; 
-    }
-    button { 
-        cursor: pointer; background: #0077b5; 
-        color: white; border: none; 
-        font-weight: bold; width: 100%; 
-    }
-</style>
-
-<script>
-    async function askChatbot() {
-        let input = document.getElementById("userInput").value;
-        let chatbox = document.getElementById("chatbox");
-
-        if (!input.trim()) {
-            return;
-        }
-
-        chatbox.innerHTML +=    
 <body>
 
     <!-- Temporary Email Generator Section -->
