@@ -58,26 +58,159 @@
     </footer>
 </body>
 </html>
-<div class="container">
-    <h2>Free Temporary Email Generator</h2>
-    <p>Click the button below to generate a free temporary email.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Generate free temporary emails and read incoming messages instantly.">
+    <title>Temporary Email Generator with Inbox</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        #emailBox {
+            font-size: 18px;
+            font-weight: bold;
+            color: #4CAF50;
+            margin: 10px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .email-list {
+            text-align: left;
+            margin-top: 20px;
+        }
+        .email-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
 
-    <button onclick="generateTempEmail()">Get Temporary Email</button>
-    <p id="emailBox">Your email will appear here...</p>
-</div>
+    <div class="container">
+        <h1>Free Temporary Email Generator</h1>
+        <p>Click the button below to get a free temporary email and receive emails.</p>
+        
+        <button onclick="generateTempEmail()">Get Temporary Email</button>
+        <p id="emailBox">Your email will appear here...</p>
 
-<script>
-    function generateTempEmail() {
-        fetch("https://api.mail.tm/domains")
-        .then(response => response.json())
-        .then(data => {
-            let domain = data["hydra:member"][0].domain; // Get the first available domain
-            let randomEmail = "user" + Math.floor(Math.random() * 100000) + "@" + domain;
-            document.getElementById("emailBox").innerText = randomEmail;
-        })
-        .catch(err => {
-            console.error(err);
-            document.getElementById("emailBox").innerText = "Error generating email.";
-        });
-    }
-</script>
+        <button onclick="fetchEmails()">Refresh Inbox</button>
+
+        <div class="email-list" id="emailList">
+            <h3>Inbox</h3>
+            <p>No emails yet.</p>
+        </div>
+    </div>
+
+    <script>
+        let email = "";
+        let emailId = "";
+        let token = "";
+
+        async function generateTempEmail() {
+            try {
+                let domainResponse = await fetch("https://api.mail.tm/domains");
+                let domainData = await domainResponse.json();
+                let domain = domainData["hydra:member"][0].domain;
+
+                let randomUser = "user" + Math.floor(Math.random() * 100000);
+                email = randomUser + "@" + domain;
+
+                document.getElementById("emailBox").innerText = email;
+
+                let accountResponse = await fetch("https://api.mail.tm/accounts", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ address: email, password: "tempPass123" })
+                });
+
+                let accountData = await accountResponse.json();
+                emailId = accountData.id;
+
+                let tokenResponse = await fetch("https://api.mail.tm/token", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ address: email, password: "tempPass123" })
+                });
+
+                let tokenData = await tokenResponse.json();
+                token = tokenData.token;
+
+            } catch (err) {
+                console.error(err);
+                document.getElementById("emailBox").innerText = "Error generating email.";
+            }
+        }
+
+        async function fetchEmails() {
+            if (!token) {
+                alert("Generate an email first!");
+                return;
+            }
+
+            try {
+                let messagesResponse = await fetch("https://api.mail.tm/messages", {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                let messagesData = await messagesResponse.json();
+                let emails = messagesData["hydra:member"];
+                let emailList = document.getElementById("emailList");
+
+                emailList.innerHTML = "<h3>Inbox</h3>";
+
+                if (emails.length === 0) {
+                    emailList.innerHTML += "<p>No emails yet.</p>";
+                    return;
+                }
+
+                emails.forEach(async (email) => {
+                    let emailDetailResponse = await fetch(`https://api.mail.tm/messages/${email.id}`, {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+
+                    let emailDetail = await emailDetailResponse.json();
+
+                    let emailItem = document.createElement("div");
+                    emailItem.classList.add("email-item");
+                    emailItem.innerHTML = `
+                        <strong>From:</strong> ${emailDetail.from.address}<br>
+                        <strong>Subject:</strong> ${emailDetail.subject}<br>
+                        <strong>Message:</strong> ${emailDetail.text}<br>
+                    `;
+                    emailList.appendChild(emailItem);
+                });
+
+            } catch (err) {
+                console.error(err);
+                alert("Error fetching emails.");
+            }
+        }
+    </script>
+
+</body>
+</html>
