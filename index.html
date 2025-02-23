@@ -99,46 +99,7 @@
         }
     </style>
 </head>
-<div class="container">
-    <h1>AI-Powered Tech Chatbot</h1>
-    <p>Ask me anything about AI, Cloud Computing, and Technology!</p>
-    <div class="chat-container">
-        <div class="chat-box" id="chatBox"></div>
-        <input type="text" id="userInput" class="chat-input" placeholder="Type your question here...">
-        <button class="button" onclick="askChatbot()">Ask</button>
-    </div>
-</div>
-
-<script>
-    async function askChatbot() {
-        let userInput = document.getElementById("userInput").value;
-        if (!userInput) return;
-
-        let chatBox = document.getElementById("chatBox");
-        chatBox.innerHTML += `<p><strong>You:</strong> ${userInput}</p>`;
-        document.getElementById("userInput").value = "";
-
-        try {
-            let response = await fetch(`https://api.monkif.ai/v1/free-tech-chatbot`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    question: userInput
-                })
-            });
-
-            let data = await response.json();
-            let botReply = data.answer || "I'm sorry, I couldn't find an answer.";
-            chatBox.innerHTML += `<p><strong>Bot:</strong> ${botReply}</p>`;
-        } catch (error) {
-            chatBox.innerHTML += `<p><strong>Bot:</strong> There was an error fetching the response.</p>`;
-        }
-
-        chatBox.scrollTop = chatBox.scrollHeight;
-    }
-</script><body>
+<body>
 
     <!-- Temporary Email Generator Section -->
     <div class="container">
